@@ -1,6 +1,4 @@
-﻿using RateLimiter.Core.Helpers;
-
-namespace RateLimiter.Core.TokenBucketLimiter;
+﻿namespace RateLimiter.Core.TokenBucketLimiter;
 
 internal class TokenBucketRateLimiter : IRateLimiter
 {
