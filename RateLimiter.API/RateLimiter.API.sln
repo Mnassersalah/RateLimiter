@@ -5,7 +5,11 @@ VisualStudioVersion = 17.8.34701.33
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RateLimiter.API", "RateLimiter.API\RateLimiter.API.csproj", "{0FBB1E58-D026-4068-A4DD-DD3821D4116B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RateLimiter.Core", "RateLimiter.Core\RateLimiter.Core.csproj", "{578DAFC7-9B7E-45CE-9FF9-DA40167C2F31}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RateLimiter.Core", "RateLimiter.Core\RateLimiter.Core.csproj", "{578DAFC7-9B7E-45CE-9FF9-DA40167C2F31}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{8BEDAE18-1676-43CC-9A1F-7EB8447DD86A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{4B455EB4-D121-4001-9382-A8A7211C9D9C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -24,6 +28,10 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{0FBB1E58-D026-4068-A4DD-DD3821D4116B} = {8BEDAE18-1676-43CC-9A1F-7EB8447DD86A}
+		{578DAFC7-9B7E-45CE-9FF9-DA40167C2F31} = {8BEDAE18-1676-43CC-9A1F-7EB8447DD86A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1569B373-44D3-4F0A-99F5-5D907ACAB6F0}

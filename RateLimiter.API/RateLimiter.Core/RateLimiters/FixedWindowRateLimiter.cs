@@ -1,18 +1,18 @@
-﻿namespace RateLimiter.Core.FixedWindowLimiter;
+﻿namespace RateLimiter.Core.RateLimiters;
 
-internal class FixedWindow
+internal class FixedWindowRateLimiter : IRateLimiter
 {
     private const int MaxRequestsInWindow = 60;
     private readonly TimeSpan _size = TimeSpan.FromSeconds(60);
     private readonly object _lock = new();
-    
+
     private DateTime _timestamp;
     private volatile int _counter = 0;
-    
 
-    public bool IsAllowed()
+
+    public bool AllowRequest()
     {
-        var currentTimestamp = new DateTime((DateTime.UtcNow.Ticks / _size.Ticks) * _size.Ticks);
+        var currentTimestamp = new DateTime(DateTime.UtcNow.Ticks / _size.Ticks * _size.Ticks);
         lock (_lock)
         {
             if (currentTimestamp != _timestamp)
@@ -25,8 +25,8 @@ internal class FixedWindow
             if (_counter >= MaxRequestsInWindow)
             {
                 return false;
-            } 
-            
+            }
+
             _counter++;
             return true;
         }

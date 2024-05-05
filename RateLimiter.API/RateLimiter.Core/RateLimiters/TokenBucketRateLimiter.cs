@@ -1,8 +1,9 @@
-﻿using Timer = System.Threading.Timer;
+﻿using RateLimiter.Core.RateLimiters;
+using Timer = System.Threading.Timer;
 
 namespace RateLimiter.Core.TokenBucketLimiter;
 
-internal class TokenBucket : IDisposable
+internal class TokenBucketRateLimiter : IRateLimiter, IDisposable
 {
     private const int Capacity = 10;
     private const int TokenAddingRateInMS = 1000;
@@ -11,13 +12,13 @@ internal class TokenBucket : IDisposable
     private readonly Timer _timer;
     private volatile int _count = 0;
 
-    public TokenBucket()
+    public TokenBucketRateLimiter()
     {
         _count = Capacity;
         _timer = new (AddingTokenCallback, this, TokenAddingRateInMS, TokenAddingRateInMS);
     }
 
-    public bool AcquireToken()
+    public bool AllowRequest()
     {
         lock (_lock)
         {

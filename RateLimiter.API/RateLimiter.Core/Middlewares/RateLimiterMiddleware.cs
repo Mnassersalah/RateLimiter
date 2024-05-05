@@ -1,42 +1,41 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
-using RateLimiter.Core;
+using RateLimiter.Core.RateLimiterManager;
 using System.Net;
 
-namespace RateLimiter.API.Middlewares
+namespace RateLimiter.API.Middlewares;
+
+internal class RateLimiterMiddleware
 {
-    public class RateLimiterMiddleware
+    private readonly RequestDelegate _next;
+    private readonly IRateLimiterManager _rateLimiterManager;
+
+    public RateLimiterMiddleware(RequestDelegate next, IRateLimiterManager rateLimiterManager)
     {
-        private readonly RequestDelegate _next;
-        private readonly IRateLimiter _rateLimiter;
-
-        public RateLimiterMiddleware(RequestDelegate next, IRateLimiter rateLimiter)
-        {
-            _next = next;
-            _rateLimiter = rateLimiter;
-        }
-
-        public async Task InvokeAsync(HttpContext context)
-        {
-            var clientIP = context.Connection.RemoteIpAddress;
-
-            if (clientIP == null || _rateLimiter.AllowRequest(clientIP.ToString()))
-            {
-                await _next(context);
-            }
-            else
-            {
-                context.Response.StatusCode = (int)HttpStatusCode.TooManyRequests;
-                await context.Response.WriteAsync("Too Many Requests");
-            }
-        }
+        _next = next;
+        _rateLimiterManager = rateLimiterManager;
     }
 
-    public static class SimpleRateLimiterMiddlewareExtensions
+    public async Task InvokeAsync(HttpContext context)
     {
-        public static IApplicationBuilder UseSimpleRateLimiterMiddleware(this IApplicationBuilder app)
+        var clientIP = context.Connection.RemoteIpAddress;
+
+        if (clientIP == null || _rateLimiterManager.AllowIPRequest(clientIP.ToString()))
         {
-            return app.UseMiddleware<RateLimiterMiddleware>();
+            await _next(context);
         }
+        else
+        {
+            context.Response.StatusCode = (int)HttpStatusCode.TooManyRequests;
+            await context.Response.WriteAsync("Too Many Requests");
+        }
+    }
+}
+
+public static class SimpleRateLimiterMiddlewareExtensions
+{
+    public static IApplicationBuilder UseSimpleRateLimiterMiddleware(this IApplicationBuilder app)
+    {
+        return app.UseMiddleware<RateLimiterMiddleware>();
     }
 }
